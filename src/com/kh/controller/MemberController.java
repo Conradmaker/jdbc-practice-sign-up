@@ -2,6 +2,7 @@ package com.kh.controller;
 
 import com.kh.model.dao.MemberDao;
 import com.kh.model.vo.Member;
+import com.kh.view.MemberMenu;
 
 /**
  * @author user2
@@ -15,7 +16,13 @@ public class MemberController {
 	 * @param m => 사용자가 입력한 정보들이 잔뜩 담겨있는 Member 객체
 	 */
 	public void insertMember(Member m) {
-		new MemberDao().insertMember(m);
+	    int result=	new MemberDao().insertMember(m);
+	    
+	    if(result>0) {
+	    	new MemberMenu().displaySuccess("회원가입 성공");
+	    }else {
+	    	new MemberMenu().displayFail("회원가입 실패");
+	    }
 	}
 	
 }

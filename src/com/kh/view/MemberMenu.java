@@ -81,7 +81,15 @@ public class MemberMenu {
 		//회원가입 요청 (Controller 메소드 호출)
 		Member m =new Member(userId,userPwd, userName, gender,age,email,phone, address, hobby);
 		
-		mc.insertMember();
+		mc.insertMember(m);
 		
+	}
+	
+	//------------------------------------
+	public void displaySuccess(String message) {
+		System.out.println("\n서비스 요청 성공 : "+message);
+	}
+	public void displayFail(String message) {
+		System.out.println("\n서비스 요청 실패 : "+message);
 	}
 }

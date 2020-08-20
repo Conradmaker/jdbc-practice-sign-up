@@ -1,5 +1,10 @@
 package com.kh.model.dao;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 import com.kh.model.vo.Member;
 
 public class MemberDao {
@@ -28,8 +33,54 @@ public class MemberDao {
 	/**
 	 * 사용자가 입력한 값들로 insert문 실행하는 메소드
 	 * @param m -> 사용자가 입력한 값들이 잔뜩 담겨있는 Member객체
+	 * @return 
 	 */
-	public void insertMember(Member m) {
+	public int insertMember(Member m) {
+		//필요한 변수를 먼저 셋팅
+		int result = 0;//처리된 결과(처리된 행 수)를 받아줄 변수
+		Connection conn = null; //DB연결정보를 담는 객체
+		Statement stmt = null; //SQL문 실행 후 결과를 받는 객체
 		
+		//실행할 sql문(완성형태로) -> ;없어야함
+		String sql = "INSERT INTO MEMBER VALUES(SEQ_USERNO.NEXTVAL,"
+				+ "'"+m.getUserId()+"',"
+				+ "'"+m.getUserPwd()+"',"
+				+ "'"+m.getUserName() +"',"
+				+ "'"+m.getGender()+"',"
+				+     m.getAge()+","
+				+ "'"+m.getEmail()+"',"
+				+ "'"+m.getPhone()+"',"
+				+ "'"+m.getAddress()+"',"
+				+ "'"+m.getHobby()+"', SYSDATE)";
+		//System.out.print(sql);
+		try {
+			//1.jdbcdriver등록
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			
+			//2.Connection 객체 생성 (DB에 연결 -> url, 계정명, 계정비밀번호
+			conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe","JDBC","JDBC");
+			
+			//3.Statement 객체 생성
+			stmt = conn.createStatement();
+			
+			//4,5 . DB에 SQL문 전달 하면서 실행 후 결과 받기 (처리된 행 수)
+			result = stmt.executeUpdate(sql);
+			
+			//6_2 . 트랜잭션
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				//7.반납 
+				stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
+		}
+		return result;
 	}
 }
