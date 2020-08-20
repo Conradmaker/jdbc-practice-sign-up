@@ -1,5 +1,6 @@
 package com.kh.view;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import com.kh.controller.MemberController;
@@ -35,7 +36,7 @@ public class MemberMenu {
 			 
 			 switch(menu) {
 			 case 1:insertMember(); break;
-			 case 2:break;
+			 case 2:mc.selectList(); break;
 			 case 3:break;
 			 case 4:break;
 			 case 5:break;
@@ -91,5 +92,14 @@ public class MemberMenu {
 	}
 	public void displayFail(String message) {
 		System.out.println("\n서비스 요청 실패 : "+message);
+	}
+	public void displayNoData(String message) {
+		System.out.println("\n"+message);
+	}
+	public void displayMemberData(ArrayList<Member> list) {
+		System.out.println("\n == 조회된 데이터는 다음과 같습니다 ==");
+		for (int i = 0; i < list.size(); i++) {
+			System.out.println(list.get(i));
+		}
 	}
 }

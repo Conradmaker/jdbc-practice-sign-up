@@ -2,8 +2,10 @@ package com.kh.model.dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 import com.kh.model.vo.Member;
 
@@ -82,5 +84,60 @@ public class MemberDao {
 			}
 		}
 		return result;
+	}
+	
+	public ArrayList<Member> selectList() { //select문 =>resultSet객체
+		//처리된 결과 (여러회원) ==여러행 들을 담아줄 ArrayList생성 
+		ArrayList<Member> list = new ArrayList<>();
+		
+		Connection conn = null; //DB연결정보 담는 객체
+		Statement stmt = null;  //SQL문 실행 및 결과 받는 객체
+		ResultSet rset =null;   //SELECT문 실행된 조회 결과값들이 처음에 담김
+		
+		String sql = "SELECT * FROM MEMBER";
+		
+		
+		try {
+			//1.jdbc driver 등록
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			//2.Connection 객체 생성
+			conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe","JDBC","JDBC");
+			//3.Statement 객체 생성
+			stmt = conn.createStatement();
+			//쿼리실행후 결과 받기
+			rset = stmt.executeQuery(sql);
+			
+			while(rset.next()) {
+				//현재 rset의 커서가 가리키고 이쓴ㄴ 한행의 데이터를 싹 다 뽑아서 Member객체 담기
+				Member m = new Member();
+				m.setUserNo(rset.getInt("USERNO"));
+				m.setUserId(rset.getString("USERID"));
+				m.setUserPwd(rset.getString("USERPWD"));
+				m.setUserName(rset.getString("USERNAME"));
+				m.setGender(rset.getString("GENDER"));
+				m.setAge(rset.getInt("AGE"));
+				m.setEmail(rset.getString("EMAIL"));
+				m.setPhone(rset.getString("PHONE"));
+				m.setAddress(rset.getString("ADDRESS"));
+				m.setHobby(rset.getString("HOBBY"));
+				m.setEnrollDate(rset.getDate("ENROLLDATE"));
+				
+				//리스트에 회원객체 차곡차곡 담기
+				list.add(m);
+			}
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				rset.close();
+				stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return list;
 	}
 }
