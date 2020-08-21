@@ -44,7 +44,7 @@ public class MemberMenu {
 			 		mc.selectByUserName(inputMemberName());
 			 		break;
 			 case 5:updateMember(); break;
-			 case 6:break;
+			 case 6:mc.deleteMember(inputMemberId());break;
 			 case 0:System.out.println("프로그램을 종료하겠습니다"); return;
 			 default:System.out.println("번호 잘못입력했다."); return;
 			 }

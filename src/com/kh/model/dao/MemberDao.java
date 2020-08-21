@@ -289,4 +289,38 @@ public class MemberDao {
 		}
 		return result;
 	}
+
+	public void deleteMember(String userId) {
+		int result = 0;
+		Connection conn = null;
+		Statement stmt = null;
+		
+		String sql = "DELETE FROM MEMBER WHERE USERID = '"+ userId +"'";
+		
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			conn=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe","JDBC","JDBC");
+			stmt = conn.createStatement();
+			
+			result = stmt.executeUpdate(sql);
+			if(result>0) {
+				conn.commit();
+			}else {
+				conn.rollback();
+			}
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			try {
+				stmt.close();
+				conn.close();
+			} catch (SQLException e2) {
+				e.printStackTrace();
+			}
+		}
+		return result;
+	}
 }

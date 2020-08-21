@@ -82,4 +82,12 @@ public class MemberController {
 			new MemberMenu().displayFail("변경실패!");
 		}
 	}
+	public void deleteMember(String userId) {
+		int result = new MemberDao().deleteMember(userId);
+		if(result>0) {
+			new MemberMenu().displaySuccess("회원탈퇴 성공");
+		}else {
+			new MemberMenu().displayFail("회원탈퇴 실패");
+		}
+	}
 }
