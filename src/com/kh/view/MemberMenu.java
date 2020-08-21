@@ -40,8 +40,10 @@ public class MemberMenu {
 			 case 3:String userId = inputMemberId(); 
 			 		mc.selectByUserId(userId);
 			 		break;
-			 case 4:break;
-			 case 5:break;
+			 case 4:// 코드를 줄여보자
+			 		mc.selectByUserName(inputMemberName());
+			 		break;
+			 case 5:updateMember(); break;
 			 case 6:break;
 			 case 0:System.out.println("프로그램을 종료하겠습니다"); return;
 			 default:System.out.println("번호 잘못입력했다."); return;
@@ -95,6 +97,41 @@ public class MemberMenu {
 		System.out.println("회원 아이디 입력: ");
 		
 		return sc.nextLine();
+	}
+	
+	/**
+	 * 사용자에게 검색할 회원명 입력받은 후 그 입력된 값 반환해주는 메소드
+	 * @return  -> 사용자가 입력한 키워드
+	 */
+	public String inputMemberName() {
+		System.out.println("회원명(키워드) 입력: ");
+		
+		return sc.nextLine();
+	}
+	/**
+	 * 사용자에게 변경할 정보들 (비밀번호, 이메일, 전화번호, 주소)와
+	 * 해당 회원의 아이디 입력받는 화면
+	 */
+	public void updateMember() {
+		System.out.println("\n ====회원정보 변경====");
+	
+		Member m = new Member();
+		m.setUserId(inputMemberId());
+		
+		System.out.print("변경할 암호: ");
+		m.setUserPwd(sc.nextLine());
+		
+		System.out.print("변경할 이메일: ");
+		m.setEmail(sc.nextLine());
+		
+		System.out.print("변경할 전화번호(-빼고 입력): ");
+		m.setPhone(sc.nextLine());
+		
+		System.out.print("변경할 주소: ");
+		m.setAddress(sc.nextLine());
+		
+		//회원정보 변경 요청! (Controller 메소드 호출)
+		mc.updateMember(m);
 	}
 	
 	//------------------------------------

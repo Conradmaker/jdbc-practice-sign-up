@@ -56,4 +56,30 @@ public class MemberController {
 			new MemberMenu().displayMember(m);
 		}
 	}
+	
+	/**
+	 * 사용자의 회원명으로 검색요청시 처리해주는 메소드
+	 * @param keyword ->사용자가 검색하고자 하는 회원명 키워드
+	 */
+	public void selectByUserName(String keyword) {
+		ArrayList<Member> list = new MemberDao().selectByUserName(keyword);
+		
+		if(list.isEmpty()) {//결과 없을경우
+			new MemberMenu().displayNoData(keyword+"조회결과가 없어요");
+		}else {
+			new MemberMenu().displayMemberData(list);
+		}
+	}
+	/**
+	 * 사용자의 정보 변경 요청을 처리해주는 메소드
+	 * @param m -> 변경하고자 하는 회원아이디, 변경할 정보(암호,이메일,전화번호,주소)
+	 */
+	public void updateMember(Member m) {
+		int result = new MemberDao().updateMember(m);
+		if(result > 0) {
+			new MemberMenu().displaySuccess("회원정보 변경 성공");
+		}else {
+			new MemberMenu().displayFail("변경실패!");
+		}
+	}
 }

@@ -197,4 +197,96 @@ public class MemberDao {
 		}
 		return m;
 	}
+
+	public ArrayList<Member> selectByUserName(String keyword) { //select문 -> ResultSet객체 (여러행 조회 가능)
+		//변수들 셋팅
+		
+		//처리결과 (조회된 회원들(여러행))
+		ArrayList<Member> list = new ArrayList<>(); //빈 리스트
+		
+		Connection conn = null;
+		Statement stmt = null;
+		ResultSet rset = null;
+		
+		String sql = "SELECT * FROM MEMBER WHERE USERNAME LIKE '%"+ keyword +"%'";
+		
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			conn = DriverManager.getConnection("jdbc:orcle:thin:@localhost:1521:xe","JDBC","JDBC");
+			stmt = conn.createStatement();
+			rset = stmt.executeQuery(sql);
+			
+			while(rset.next()) {
+				
+					list.add(new Member(
+							rset.getInt("USERNO"),
+							rset.getString("USERID"),
+							rset.getString("USERPWD"),
+							rset.getString("USERNAME"),
+							rset.getString("GENDER"),
+							rset.getInt("AGE"),
+							rset.getString("EMAIL"),
+							rset.getString("PHONE"),
+							rset.getString("ADDRESS"),
+							rset.getString("HOBBY"),
+							rset.getDate("ENROLLDATE")
+									   )
+							);
+				
+			}
+			
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			
+			try {
+				rset.close();
+				stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+		}
+		return list;
+	}
+
+	
+	public int updateMember(Member m ) {  //update문 => 처리된행수(int)=>트랜잭션 처리
+		
+		int result = 0;
+		Connection conn = null;
+		Statement stmt = null;
+		
+		String sql = "UPDATE MEMBER"
+				+ "SET USERPWD = '" + m.getUserPwd() + "',"
+				+ "SET EMAIL = '" + m.getEmail() + "',"
+				+ "SET PHONE = '" + m.getPhone() + "',"
+				+ "SET ADDRESS = '" + m.getAddress() + "',"
+				+ "WHERE USERID='" + m.getUserId() + "'";
+		
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe","JDBC","JDBC");
+			
+			stmt = conn.createStatement();
+			result = stmt.executeUpdate(sql);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			
+			try {
+				stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return result;
+	}
 }
