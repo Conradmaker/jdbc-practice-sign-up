@@ -37,7 +37,9 @@ public class MemberMenu {
 			 switch(menu) {
 			 case 1:insertMember(); break;
 			 case 2:mc.selectList(); break;
-			 case 3:break;
+			 case 3:String userId = inputMemberId(); 
+			 		mc.selectByUserId(userId);
+			 		break;
 			 case 4:break;
 			 case 5:break;
 			 case 6:break;
@@ -85,6 +87,15 @@ public class MemberMenu {
 		mc.insertMember(m);
 		
 	}
+	/**
+	 * 사용자에게 회원 아이디 입력받은 후 그 입력한 값 반환해주는 메소드
+	 * @return  -> 사용자가 입력한 회원아이디
+	 */
+	public String inputMemberId() {
+		System.out.println("회원 아이디 입력: ");
+		
+		return sc.nextLine();
+	}
 	
 	//------------------------------------
 	public void displaySuccess(String message) {
@@ -102,4 +113,8 @@ public class MemberMenu {
 			System.out.println(list.get(i));
 		}
 	}
+	public void displayMember(Member m) {
+		System.out.println("\n == 조회된 데이터는 다음과 같습니다 ==");
+		System.out.println(m);
+		}
 }

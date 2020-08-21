@@ -43,4 +43,17 @@ public class MemberController {
 		}
 		
 	}
+	/**
+	 * 사용자의 아이디로 회원 검색 요청 처리해주는 메소드
+	 * @param userId	=> 사용자가 검색하고자 하는 회원아이디
+	 */
+	public void selectByUserId(String userId) {
+		Member m = new MemberDao().selectByUserId(userId);
+		
+		if(m==null) { //검색결과가 있을경우
+			new MemberMenu().displayNoData("검색결과가 없다. ");
+		}else { //조회되었을경우
+			new MemberMenu().displayMember(m);
+		}
+	}
 }

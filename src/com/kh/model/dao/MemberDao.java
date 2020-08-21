@@ -140,4 +140,61 @@ public class MemberDao {
 		}
 		return list;
 	}
+
+	public Member selectByUserId(String userId) { //select문 ->resultSet객체(한행)
+		
+		//필요한 변수들 셋팅
+		
+		//처리결과(조회된 한 회원)
+		Member m = null;
+		
+		Connection conn = null;//DB의 연결정보 담는 객체
+		Statement stmt = null; //sql문 실행 및 결과받는 객체
+		ResultSet rset = null; //조회결과가 처음에 실질적으로 담기는 객체
+		
+		String sql = "SELECT * FROM MEMBER WHERE USERID = '"+ userId +"'";
+		
+		
+		try {
+			//1.
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			//2.
+			conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe","JDBC","JDBC");
+			//3.
+			stmt = conn.createStatement();
+			//4,5
+			rset=stmt.executeQuery(sql);
+			
+			//6_1.
+			if(rset.next()) {
+				m=new Member(
+						rset.getInt("USERNO"),
+						rset.getString("USERID"),
+						rset.getString("USERPWD"),
+						rset.getString("USERNAME"),
+						rset.getString("GENDER"),
+						rset.getInt("AGE"),
+						rset.getString("EMAIL"),
+						rset.getString("PHONE"),
+						rset.getString("ADDRESS"),
+						rset.getString("HOBBY"),
+						rset.getDate("ENROLLDATE")
+						);
+			}
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				rset.close();
+				stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return m;
+	}
 }
